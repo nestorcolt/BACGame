@@ -1,4 +1,5 @@
 #include "FBullCowGameOBJ.h"
+#include <stdio.h>
 
 using int32 = int;
 
@@ -29,8 +30,25 @@ void FBullCowGameOBJ::reset() {
 	return;
 }
 
-bool FBullCowGameOBJ::CheckGuessValidity(FString) const {
-	return false;
+EGuessInputStatus FBullCowGameOBJ::CheckGuessValidity(FString Guess) const {
+	
+	if (Guess == "rootExit") {
+		return EGuessInputStatus::rootExit;
+	}
+
+	if (false) {
+		return EGuessInputStatus::Not_Isogramm;
+	}
+	else if (Guess.length() != getHiddenWordLenght()) {
+		return EGuessInputStatus::Wrong_Lenght;
+	}
+	else if (false) {
+		return EGuessInputStatus::Not_Lowercase;
+	}
+	else {
+		return EGuessInputStatus::OK;
+		
+	}
 }
 
 // receives a VALID guess, increments turn and returns cows
