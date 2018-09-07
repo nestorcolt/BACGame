@@ -16,6 +16,7 @@ struct FBullcowCount {
 //
 
 enum class EGuessInputStatus {
+	rootSetWord,
 	rootExit,
 	Invalid_Status,
 	OK,
@@ -31,13 +32,15 @@ public:
 
 	FBullCowGameOBJ(); //Constructor
 
+	FString myHiddenWord;
 	int32 getMaxTries() const;
 	int32 myCurrentTry;
 	int32 getCurrentTry() const;
 	int32 getHiddenWordLenght() const;
 	
 	//getWord >> will return User input word 
-	FString getWord();
+	FString setWord();
+	FString getFeedback();
 
 	bool isGameWom() const;
 	void reset(); // TODO make a more rich value for return reset
@@ -50,7 +53,9 @@ public:
 private:
 	
 	int32 myMaxTries;
+	int32 myCurrentBullCounter;
+	FString originalWord = "plant";
 	bool isIsogram(FString);
-	FString myHiddenWord;
+
 };
 

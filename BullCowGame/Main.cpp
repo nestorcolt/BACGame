@@ -8,6 +8,10 @@ user interacion. For game logic see the FBullCowGame class.
 #include <string>
 #include "FBullCowGameOBJ.h"
 
+
+
+//----------------------------
+
 using FText = std::string;
 using int32 = int;
 
@@ -90,7 +94,6 @@ void playGame(){
 	for (int32 idx = 1; idx <= maxTries; idx++) {
 
 		FText Guess = GetGuess(); 
-		std::cout << std::endl;
 
 		if (Guess == "rootExit") {
 			return;
@@ -99,10 +102,16 @@ void playGame(){
 
 		//Submit valid guess 
 		FBullcowCount bullCowCount = BCGame.SubmitGuess(Guess);
-		std::cout << "Bulls =  " << bullCowCount.Bulls;
-		std::cout << " Cows = " << bullCowCount.Cows << std::endl;
+		std::cout << "  - Bulls =  " << bullCowCount.Bulls << std::endl;
+		std::cout << "  - Cows  =  " << bullCowCount.Cows << std::endl;
 		std::cout << std::endl;
 
+		if (BCGame.isGameWom()) {
+			Guess = BCGame.myHiddenWord;
+			std::cout << " - CONGRATULATIONS YOU'VE WON !!! \n\n";
+
+			return;
+		}
 	}
 
 	// TODO sumarise game.
@@ -121,21 +130,30 @@ FText GetGuess() {
 		int32 currentTry = BCGame.getCurrentTry();
 
 		std::cout << "Try: " << currentTry;
-		std::cout << "- Input your Guess: ";
+		std::cout << " + (" << BCGame.getFeedback() <<") + ";
+		std::cout << " Type a " << BCGame.getHiddenWordLenght() << " Letters Word: ";
 		std::getline(std::cin, Guess);
 		
+
 		Status = BCGame.CheckGuessValidity(Guess);
 
 		switch (Status) {
 
+		case EGuessInputStatus::rootSetWord:
+			BCGame.setWord();
+			std::cout << " - Hidden word changed - " << std::endl;
+			break;
+
 		case EGuessInputStatus::rootExit:
 			std::cout << "Exiting Game ...\n";
+			std::cout << std::endl;
 			return Guess;
 			
 		case EGuessInputStatus::Wrong_Lenght:
 			std::cout << "Please enter a " << BCGame.getHiddenWordLenght() << " letter word\n";
 			BCGame.myCurrentTry++;
 			break;
+
 		case EGuessInputStatus::Not_Isogramm:
 			std::cout << "Entered word isn't a Isogram, please try again\n";
 			BCGame.myCurrentTry++;
@@ -147,20 +165,21 @@ FText GetGuess() {
 			break;
 
 		default:
+			BCGame.myCurrentTry++;
 			break;
 			
 		}
-	
-		//Makes extra line between submits
-		std::cout << std::endl;
-
+		
+	std::cout << std::endl;
 	} while (Status != EGuessInputStatus::OK);
 	
+
 	return Guess;
 }
 
 bool playAgain() {
 
+	std::cout << std::endl;
 	std::cout << "Do you want to play again?" << std::endl;
 	std::cout << "Type [yes] or [no]" << std::endl;
 
@@ -196,8 +215,10 @@ bool playAgain() {
 // Introduce the game to the user
 void PrintIntro() {	
 
-	std::cout << "Welcome to Bulls and Cows\n" << std::endl;
-	std::cout << "Can you guess the " << BCGame.getHiddenWordLenght();
-	std::cout << " letter isogram I'm thinking of? \n\n";
+	
+	std::cout << std::endl;
+	std::cout << "Welcome to Bulls and Cows" << std::endl;
+	std::cout << "Can you guess the isogram word I'm thinking of? \n\n\n";
+
 	return; 
 }
