@@ -3,12 +3,10 @@ This is the console executable that makes use of the bullCob class
 this acts as the view in a MVC patterns, and is responsable for all
 user interacion. For game logic see the FBullCowGame class.
 */
-
+#pragma once
 #include <iostream>
 #include <string>
 #include "FBullCowGameOBJ.h"
-
-
 
 //----------------------------
 
@@ -20,8 +18,10 @@ using int32 = int;
 //Globals:
 constexpr int32	number_of_turns = 5;
 // 
+
+//PROTOTYPES 
 void PrintIntro();
-void playGame();
+void playGame(int32 level);
 FText GetGuess();
 bool playAgain();
 
@@ -29,39 +29,7 @@ bool playAgain();
 FBullCowGameOBJ BCGame;
 
 // --------------------------------------------------------------------------------------------------------
-
-// the entry point to the application
-
-/*
 int main(){
-
-	bool playAgainCheck = true;
-
-
-	while (playAgainCheck == true) {
-		// prints intro and welcome to the game
-		PrintIntro();
-
-		// execute game
-		playGame();
-
-		// retry game
-		playAgainCheck = playAgain();
-
-	
-
-	}
-
-
-	return 0;
-
-} 
-*/
-
-
-
-int main(){
-
 
 	bool playAgainCheck = true;
 
@@ -70,8 +38,11 @@ int main(){
 			// prints intro and welcome to the game
 			PrintIntro();
 
+			//Setup level
+			int32 level = BCGame.getDificulty();
+
 			// execute game
-			playGame();
+			playGame(level);
 
 			// retry game
 			playAgainCheck = playAgain();
@@ -84,11 +55,11 @@ int main(){
 } 
 
 
+void playGame(int32 level){
 
-
-void playGame(){
-
-	int32 maxTries = BCGame.getMaxTries();
+	""" Error """;
+	int32 maxTries = BCGame.getMaxTries(level);
+	BCGame.myMaxTries = maxTries;
 
 	// loop getting guesses
 	for (int32 idx = 1; idx <= maxTries; idx++) {
@@ -112,12 +83,13 @@ void playGame(){
 
 			return;
 		}
+		else if (BCGame.myMaxTries == BCGame.myCurrentTry) {
+			std::cout << "GAME OVER =( BETTER LUCK NEXT TIME!\n";
+			return;
+		}
 	}
 
-	// TODO sumarise game.
-
 }
-
 
 // get a guess from the player
 FText GetGuess() {
@@ -129,12 +101,11 @@ FText GetGuess() {
 
 		int32 currentTry = BCGame.getCurrentTry();
 
-		std::cout << "Try: " << currentTry;
-		std::cout << " + (" << BCGame.getFeedback() <<") + ";
+		std::cout << "Try: " << currentTry << " of " << BCGame.myMaxTries;
+		std::cout << " + (" << BCGame.getFeedback() << ") + ";
 		std::cout << " Type a " << BCGame.getHiddenWordLenght() << " Letters Word: ";
 		std::getline(std::cin, Guess);
 		
-
 		Status = BCGame.CheckGuessValidity(Guess);
 
 		switch (Status) {
@@ -216,9 +187,14 @@ bool playAgain() {
 void PrintIntro() {	
 
 	
+	std::cout << "\tWelcome to Bulls and Cows" << std::endl;
 	std::cout << std::endl;
-	std::cout << "Welcome to Bulls and Cows" << std::endl;
+	std::cout << "          }   {         ___ " << std::endl;
+	std::cout << "          (o o)        (o o) " << std::endl;
+	std::cout << "   /-------\\ /          \\ /-------\\ " << std::endl;
+	std::cout << "  / | BULL |O            O| COW  | \\ " << std::endl;
+	std::cout << " *  |-,--- |              |------|  * " << std::endl;
+	std::cout << "    ^      ^              ^      ^ " << std::endl;
 	std::cout << "Can you guess the isogram word I'm thinking of? \n\n\n";
-
-	return; 
+	return ; 
 }

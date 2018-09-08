@@ -5,7 +5,7 @@ using FString = std::string;
 using int32 = int;
 
 /*
-Implement of struct - is like a class but will all memmbers public by default
+Implement of struct - is like a class but will have all memmbers public by default
 */
 
 struct FBullcowCount {
@@ -33,29 +33,35 @@ public:
 	FBullCowGameOBJ(); //Constructor
 
 	FString myHiddenWord;
-	int32 getMaxTries() const;
+	int32 getMaxTries(int32 level) const;
 	int32 myCurrentTry;
 	int32 getCurrentTry() const;
 	int32 getHiddenWordLenght() const;
+	int32 myMaxTries = 10;
 	
 	//getWord >> will return User input word 
 	FString setWord();
 	FString getFeedback();
+	int32 getDificulty() const;
+
 
 	bool isGameWom() const;
-	void reset(); // TODO make a more rich value for return reset
-	EGuessInputStatus CheckGuessValidity(FString) const; // TODO make a more rich value for return GuessValidity
+	void reset(); // TODO make a more rich value for return reset and select qhwn to reset with command
+	EGuessInputStatus CheckGuessValidity(FString) const; 
 
 	// counts bulls & cows and increases try #
 	FBullcowCount SubmitGuess(FString);
 
 
 private:
-	
-	int32 myMaxTries;
+	//aqui esta el error
+	int32 doCalculate(int32 value) const;
 	int32 myCurrentBullCounter;
 	FString originalWord = "plant";
-	bool isIsogram(FString);
+	FString currentGuess;
+
+	bool isIsogram(FString) const;
+	bool isLowercase(FString) const;
 
 };
 
